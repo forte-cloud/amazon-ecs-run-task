@@ -69,9 +69,9 @@ function removeIgnoredAttributes(taskDef) {
     if (taskDef[attribute]) {
       core.warning(
         `Ignoring property '${attribute}' in the task definition file. ` +
-          'This property is returned by the Amazon ECS DescribeTaskDefinition API and may be shown in the ECS console, ' +
-          'but it is not a valid field when registering a new task definition. ' +
-          'This field can be safely removed from your task definition file.'
+        'This property is returned by the Amazon ECS DescribeTaskDefinition API and may be shown in the ECS console, ' +
+        'but it is not a valid field when registering a new task definition. ' +
+        'This field can be safely removed from your task definition file.'
       );
       delete taskDef[attribute];
     }
@@ -174,7 +174,7 @@ async function run() {
       assignPublicIp,
     }
 
-    if (launchType === 'FARGATE') {
+    if (launchType === 'FARGATE' || registerResponse.taskDefinition.networkMode === 'awsvpc') {
       runTaskRequest.launchType = launchType;
       // FARGATE launch type requires awsvpcConfiguration.
       runTaskRequest.networkConfiguration = {
@@ -188,16 +188,11 @@ async function run() {
         core.info(`Capacity provider strategy is set. Launch type will be ignored.`);
         runTaskRequest.launchType = undefined;
         runTaskRequest.capacityProviderStrategy = JSON.parse(capacityProviderStrategyString);
-
-        // If capacity provider is provided, then awsvpcConfiguration is required.
-        runTaskRequest.networkConfiguration = {
-          awsvpcConfiguration: vpcConfiguration,
-        }
       } catch (error) {
         core.setFailed("Failed to parse capacity provider strategy definition: " + error.message);
         core.debug("Parameter value:");
         core.debug(capacityProviderStrategyString);
-        throw(error);
+        throw (error);
       }
     }
 

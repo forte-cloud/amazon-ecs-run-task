@@ -1,50 +1,50 @@
-name: 'Amazon ECS Run Task Action with Fargate support for GitHub Actions'
-description: 'Runs an Amazon ECS task, launched on either Fargate or EC2'
+name: "Amazon ECS Run Task Action with Fargate and EC2 support for GitHub Actions"
+description: "Runs an Amazon ECS task, launched on either Fargate or EC2"
 branding:
-  icon: 'cloud'
-  color: 'orange'
+  icon: "cloud"
+  color: "orange"
 inputs:
   task-definition:
-    description: 'The name of ECS task definition'
+    description: "The name of ECS task definition"
     required: true
   cluster:
     description: "The name of the ECS cluster. Will default to the 'default' cluster"
     required: true
   count:
-    description: 'The count of tasks to run. Will default to the 1'
+    description: "The count of tasks to run. Will default to the 1"
     required: true
   started-by:
-    description: 'The value of the task started-by'
+    description: "The value of the task started-by"
     required: false
   wait-for-finish:
-    description: 'Whether to wait for tasks to reach stopped state. Will default to not waiting'
+    description: "Whether to wait for tasks to reach stopped state. Will default to not waiting"
     required: false
   wait-for-minutes:
-    description: 'How long to wait for the task reach stopped state, in minutes (default: 30 minutes, max: 6 hours).'
+    description: "How long to wait for the task reach stopped state, in minutes (default: 30 minutes, max: 6 hours)."
     required: false
   launch-type:
     description: The launch type of the task, either FARGATE or EC2. Can be overridden by the capacity-provider-strategy.
     required: false
   capacity-provider-strategy:
     description: |
-      JSON representation of the capacity provider strategy to use for the task. Only set if provided. 
-      Example: '[{"capacityProvider": "FARGATE_SPOT", "base": 0, "weight": 1}]'. 
+      JSON representation of the capacity provider strategy to use for the task. Only set if provided.
+      Example: '[{"capacityProvider": "FARGATE_SPOT", "base": 0, "weight": 1}]'.
       Provider options: [FARGATE, FARGATE_SPOT].
       Overrides value of launch-type if set.
     required: false
   subnets:
     description: |
-      The subnets to launch a FARGATE tasks in, required if launch type is FARGATE and is expected in CSV format. 
-      Only applies if either "launch-type" or "capacity-provider-strategy" is set.
+      The subnets to launch tasks in, required if launch type is FARGATE or network mode is awsvpc and is expected in CSV format.
+      Only applies if either "launch-type" is FARGATE or task network mode is awsvpc is set.
     required: false
   security-groups:
     description: |
-      The security groups to associate a FARGATE task with, required if launch type is FARGATE and is expected in CSV format.
-      Only applies if either "launch-type" or "capacity-provider-strategy" is set.
+      The security groups to associate task with, required if launch type is FARGATE or network mode is awsvpc and is expected in CSV format.
+      Only applies if either "launch-type" is FARGATE or task network mode is awsvpc is set.
     required: false
   assign-public-ip:
     description: |
-      Whether to assign a public IP to the FARGATE task or not, required if launch type is FARGATE. 
+      Whether to assign a public IP to the FARGATE task or not, required if launch type is FARGATE.
       Should be one of [DISABLED,ENABLED]. Defaults to DISABLED
     required: false
   task-role-override:
@@ -55,9 +55,9 @@ inputs:
     required: false
 outputs:
   task-definition-arn:
-    description: 'The ARN of the registered ECS task definition'
+    description: "The ARN of the registered ECS task definition"
   task-arn:
-    description: 'The ARN of the ECS task'
+    description: "The ARN of the ECS task"
 runs:
-  using: 'node16'
-  main: 'dist/index.js'
+  using: "node16"
+  main: "dist/index.js"
