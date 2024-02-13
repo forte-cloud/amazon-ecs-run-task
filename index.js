@@ -174,9 +174,16 @@ async function run() {
       assignPublicIp,
     }
 
-    if (launchType === 'FARGATE' || registerResponse.taskDefinition.networkMode === 'awsvpc') {
+    if (launchType === 'FARGATE') {
       runTaskRequest.launchType = launchType;
       // FARGATE launch type requires awsvpcConfiguration.
+      runTaskRequest.networkConfiguration = {
+        awsvpcConfiguration: vpcConfiguration,
+      }
+    }
+
+    if (registerResponse.taskDefinition.networkMode === 'awsvpc' && !runTaskRequest.networkConfiguration) {
+      // Must set network configuration if networkMode is awsvpc
       runTaskRequest.networkConfiguration = {
         awsvpcConfiguration: vpcConfiguration,
       }
