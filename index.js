@@ -13,6 +13,7 @@ const IGNORED_TASK_DEFINITION_ATTRIBUTES = [
   'status',
   'registeredBy',
   'registeredAt',
+  'enableFaultInjection',
 ];
 
 const WAIT_DEFAULT_DELAY_SEC = 5;
